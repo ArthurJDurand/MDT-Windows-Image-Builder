@@ -1,0 +1,244 @@
+name: 🐛 Bug Report
+description: Report a bug in a build script, autounattend file, or documented workflow
+title: "[Bug]: "
+labels:
+  - bug
+  - needs-triage
+assignees:
+  - ArthurJDurand
+
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for taking the time to file a bug report. Before submitting, please:
+
+        1. **Search [existing issues](https://github.com/ArthurJDurand/MDT-Windows-Image-Builder/issues)** to avoid duplicates.
+        2. **Check [docs/TROUBLESHOOTING.md](https://github.com/ArthurJDurand/MDT-Windows-Image-Builder/blob/main/docs/TROUBLESHOOTING.md)** for common errors and fixes.
+        3. **Review the [Known Limitations](https://github.com/ArthurJDurand/MDT-Windows-Image-Builder#known-limitations)** section in the README.
+
+        The more detail you provide, the faster this can be resolved.
+
+  - type: checkboxes
+    id: preflight
+    attributes:
+      label: Pre-flight checks
+      description: Please confirm you have completed these steps before filing.
+      options:
+        - label: I have searched existing issues and this bug has not been reported.
+          required: true
+        - label: I have read docs/TROUBLESHOOTING.md and my issue is not covered there.
+          required: true
+        - label: I have read the Known Limitations section in the README.
+          required: true
+        - label: I am running the latest version of the repository (main branch).
+          required: true
+
+  - type: textarea
+    id: description
+    attributes:
+      label: Description
+      description: A clear and concise description of what the bug is.
+      placeholder: |
+        Example: The autounattend/audit-mode.xml file fails to skip the OOBE
+        account-creation step on Windows 11 24H2. Setup stops at the
+        "Let's connect you to a network" screen and never enters audit mode.
+    validations:
+      required: true
+
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected behaviour
+      description: What did you expect to happen?
+      placeholder: The VM should reboot directly into audit mode without any OOBE prompts.
+    validations:
+      required: true
+
+  - type: textarea
+    id: actual
+    attributes:
+      label: Actual behaviour
+      description: What actually happened? Include exact error messages verbatim.
+      placeholder: |
+        Setup stops at the network connection screen. No error is shown.
+        Pressing Shift+F10 and inspecting C:\Windows\Panther\setupact.log shows:
+        "OOBE: Skipping account creation due to missing LocalAccount entry."
+    validations:
+      required: true
+
+  - type: textarea
+    id: reproduction
+    attributes:
+      label: Steps to reproduce
+      description: Exact steps to reproduce the bug. Be specific.
+      placeholder: |
+        1. Built ISO from UUPDump build 26100.1742 (Windows 11 24H2, Pro, en-US)
+        2. Created Hyper-V Gen 2 VM with 4 GB RAM, 60 GB disk, no TPM
+        3. Mounted ISO, booted from it
+        4. autounattend/audit-mode.xml placed at ISO root before boot
+        5. Setup reaches the network connection screen and does not proceed
+    validations:
+      required: true
+
+  - type: dropdown
+    id: workflow_step
+    attributes:
+      label: Workflow step where the bug occurs
+      description: At which step of the image building workflow does the bug occur?
+      options:
+        - Downloading the UUPDump package
+        - Running the UUPDump build script
+        - Extracting install.wim or install.esd from the ISO
+        - Setting up the Hyper-V VM
+        - Booting into audit mode
+        - Applying customizations in audit mode
+        - Running sysprep /generalize
+        - Capturing the sealed image with DISM
+        - Importing the image into MDT or another tool
+        - Documentation or README accuracy
+        - Not sure / other
+    validations:
+      required: true
+
+  - type: dropdown
+    id: component
+    attributes:
+      label: Affected component (if known)
+      description: Which part of the repository is involved? Select the closest match.
+      options:
+        - Not sure / multiple components
+        - autounattend/audit-mode.xml
+        - autounattend/README.md
+        - scripts/New-WindowsISO.ps1
+        - scripts/Mount-InstallWim.ps1
+        - scripts/Capture-WindowsImage.ps1
+        - docs/WINDOWS-IMAGE-BUILDING.md
+        - docs/AUDIT-MODE.md
+        - docs/HYPER-V-SETUP.md
+        - docs/SYSPREP.md
+        - docs/CAPTURE-AND-IMPORT.md
+        - docs/TROUBLESHOOTING.md
+        - README.md
+        - Other (specify in Description)
+    validations:
+      required: true
+
+  - type: dropdown
+    id: windows_target
+    attributes:
+      label: Windows version being built
+      options:
+        - Windows 11 24H2 or later
+        - Windows 11 23H2
+        - Windows 11 22H2
+        - Windows 11 21H2
+        - Windows 10 22H2
+        - Windows 10 21H2 or earlier
+        - Not applicable
+    validations:
+      required: true
+
+  - type: input
+    id: windows_build
+    attributes:
+      label: Windows build number
+      description: The full build number of the ISO you built. Check the UUPDump page or `winver` in the VM.
+      placeholder: "26100.1742"
+    validations:
+      required: true
+
+  - type: dropdown
+    id: architecture
+    attributes:
+      label: Architecture
+      options:
+        - amd64 (x64)
+        - x86
+        - arm64
+        - Not sure
+    validations:
+      required: true
+
+  - type: dropdown
+    id: edition
+    attributes:
+      label: Windows edition selected in the ISO
+      options:
+        - Pro
+        - Pro + Home
+        - Pro + Enterprise
+        - Multiple editions (specify in Description)
+        - Not sure
+    validations:
+      required: true
+
+  - type: dropdown
+    id: environment
+    attributes:
+      label: Build and test environment
+      options:
+        - Physical machine — Hyper-V enabled
+        - Physical machine — Hyper-V not used
+        - Nested virtualization (Hyper-V inside another hypervisor)
+        - VMware Workstation / Player
+        - VirtualBox
+        - QEMU / KVM
+        - Other (specify in Description)
+    validations:
+      required: true
+
+  - type: input
+    id: host_os
+    attributes:
+      label: Build host operating system
+      placeholder: "Windows 11 Pro 23H2 (build 22631.4460)"
+    validations:
+      required: true
+
+  - type: input
+    id: uupdump_build
+    attributes:
+      label: UUPDump build ID
+      description: The build identifier from the UUPDump package you downloaded (usually visible in the .zip filename or the URL).
+      placeholder: "26100.1742_amd64_en-us_professional_<uuid>"
+    validations:
+      required: false
+
+  - type: textarea
+    id: logs
+    attributes:
+      label: Relevant log excerpts
+      description: |
+        Paste only the lines surrounding the error. Do **not** paste entire logs inline.
+
+        Relevant log locations:
+        - **UUPDump build:** console output of `uup_download_windows.cmd`, plus `aria2c.log` in the same folder
+        - **Setup logs (in the VM):** `C:\Windows\Panther\setupact.log`, `C:\Windows\Panther\setuperr.log`
+        - **Sysprep logs:** `C:\Windows\System32\Sysprep\Panther\setuperr.log`
+        - **DISM logs:** `C:\Windows\Logs\DISM\dism.log`
+        - **Script output:** console output of the PowerShell script that failed
+
+        If your log is long, attach it as a file or upload to a Gist and link it here.
+      render: text
+      placeholder: |
+        [2024-11-15 14:32:18] [ERROR] DISM returned error 0x800f081f
+        [2024-11-15 14:32:18] [ERROR] At C:\...\Capture-WindowsImage.ps1:142
+    validations:
+      required: false
+
+  - type: textarea
+    id: screenshots
+    attributes:
+      label: Screenshots
+      description: If applicable, add screenshots of error dialogs or the VM state. Drag and drop images directly into this box.
+    validations:
+      required: false
+
+  - type: textarea
+    id: additional
+    attributes:
+      label: Additional context
+      description: Anything else that might be relevant — recent changes, custom modifications to the workflow, unusual hardware, and so on.
+    validations:
+      required: false
