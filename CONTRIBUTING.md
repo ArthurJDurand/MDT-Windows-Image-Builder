@@ -18,6 +18,7 @@ This document explains how to contribute effectively and what standards your con
 - [Branch Naming](#branch-naming)
 - [Pull Request Process](#pull-request-process)
 - [What Reviewers Look For](#what-reviewers-look-for)
+- [Working Across the Three Repositories](#working-across-the-three-repositories)
 - [Areas Where Help Is Needed](#areas-where-help-is-needed)
 - [Reporting Bugs](#reporting-bugs)
 - [License of Contributions](#license-of-contributions)
@@ -453,7 +454,7 @@ When reviewing a PR, the maintainer checks:
 | **Windows build stated** | Behaviour differs between 22H2, 23H2, and 24H2 |
 | **Autounattend XML validity** | Malformed XML leaves the user stuck at OOBE |
 | **No secrets in autounattend** | Product keys and credentials must never be committed |
-| **Script header documentation** | SYNOPSIS, DESCRIPTION, NOTES block present |
+| **Script header documentation** | SYNOPSIS, DESCRIPTION, PARAMETER, NOTES block present |
 | **Parameter blocks** | No hardcoded user paths |
 | **Cleanup on failure** | WIMs unmounted, VHDs detached, in `finally` blocks |
 | **Exit code preservation** | Failures are visible to the caller |
@@ -461,6 +462,28 @@ When reviewing a PR, the maintainer checks:
 | **Documentation updated** | README and relevant docs reflect the change |
 | **CHANGELOG entry** | Added under `[Unreleased]` |
 | **Small, focused scope** | One logical change per PR |
+
+---
+
+## Working Across the Three Repositories
+
+This project is part of a three-repository ecosystem. Before opening a PR, determine which repository the change belongs to.
+
+| Repository | What belongs there |
+|---|---|
+| [`MDT-Zero-Touch-Deployment`](https://github.com/ArthurJDurand/MDT-Zero-Touch-Deployment) | Task sequences, deployment scripts, the OEM Apps framework, the deployment share structure, offline media workflow, and all deployment documentation |
+| [`MDT-OEM-Extensibility`](https://github.com/ArthurJDurand/MDT-OEM-Extensibility) | The tooling and recipes that build the per-vendor `.7z` payload archives. Changes to how OEM apps are downloaded, staged, and packed belong there. |
+| [`MDT-Windows-Image-Builder`](https://github.com/ArthurJDurand/MDT-Windows-Image-Builder) (this repo) | The UUPDump workflow, `autounattend.xml` templates, Hyper-V setup, audit mode, and image capture. Changes to how Windows images are built belong here. |
+
+If you are unsure, open a Discussion. Cross-repository changes should be coordinated across the relevant repositories.
+
+### What this repository does not cover
+
+- **Deployment** — how an image is installed, driver-injected, or customized at OOBE belongs in `MDT-Zero-Touch-Deployment`
+- **OEM payload construction** — how vendor apps and drivers are downloaded and packed belongs in `MDT-OEM-Extensibility`
+- **Task sequences** — the sequence definitions that deploy an image belong in `MDT-Zero-Touch-Deployment`
+
+Keep the scope of this repository focused on producing the `install.wim` and any audit-mode customizations. Everything downstream is another repository's responsibility.
 
 ---
 
@@ -536,7 +559,7 @@ Found a bug? [Open an issue](https://github.com/ArthurJDurand/MDT-Windows-Image-
 
 ## License of Contributions
 
-By submitting a pull request to this project, you agree that your contribution is licensed under the same [MIT License](LICENSE.md) that governs the project.
+By submitting a pull request to this project, you agree that your contribution is licensed under the same [MIT License](LICENSE) that governs the project.
 
 You confirm that:
 
