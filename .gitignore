@@ -1,0 +1,335 @@
+# ═══════════════════════════════════════════════════════════════════════════
+# .gitignore — MDT-Windows-Image-Builder
+# ═══════════════════════════════════════════════════════════════════════════
+#
+# This repository ships scripts, autounattend XML files, and documentation.
+# It does not ship Windows ISOs, WIM/ESD/SWM files, VM disk images, or
+# captured images — those are multi-GB build artifacts that belong on your
+# local machine or a network share, never in Git.
+#
+# The rules below ignore those artifacts everywhere. If you need to track a
+# small binary (a config, a sample, a placeholder), force-add it with
+# `git add -f` and explain why in your commit message.
+#
+# ═══════════════════════════════════════════════════════════════════════════
+
+
+# ───────────────────────────────────────────────────────────────────────────
+# 1. WINDOWS INSTALLATION MEDIA AND IMAGES
+# ───────────────────────────────────────────────────────────────────────────
+# The output of this repository's workflow. None of these should be
+# committed. Store them on your local disk, a network share, or your own
+# cloud storage.
+
+# Windows installation images
+*.iso
+*.img
+
+# Windows Imaging Format files (deployed and capture outputs)
+*.wim
+*.esd
+*.swm
+
+# Full Flash Update (Windows IoT and OEM imaging)
+*.ffu
+
+# Windows To Go and similar VHD-based builds
+*.vhd
+*.vhdx
+*.avhdx
+
+
+# ───────────────────────────────────────────────────────────────────────────
+# 2. VIRTUAL MACHINE FILES
+# ───────────────────────────────────────────────────────────────────────────
+# Hyper-V, VirtualBox, VMware, and QEMU artifacts created while building or
+# testing images. Machine-specific, large, and regenerable.
+
+# Hyper-V
+*.vmsn
+*.vmsd
+*.vmss
+*.vmrs
+*.bin
+*.vsv
+*.vhdpmem
+Virtual Machines/
+Snapshots/
+
+# VirtualBox
+*.vbox
+*.vbox-prev
+*.vdi
+*.vbox-extpack
+
+# VMware
+*.vmx
+*.vmxf
+*.vmdk
+*.vmem
+*.vmsn
+*.nvram
+*.vmtm
+*.vmwarevm/
+
+# QEMU / KVM
+*.qcow2
+*.qed
+*.qcow
+*.vmdk
+
+
+# ───────────────────────────────────────────────────────────────────────────
+# 3. UUPDUMP WORKING DIRECTORIES
+# ───────────────────────────────────────────────────────────────────────────
+# The UUPDump script produces a working directory with downloaded component
+# files, extraction staging, and temporary build output. All of it is
+# regenerable from a fresh UUPDump package.
+
+UUPs/
+UUPs_*/
+UUP/
+UUP_*/
+*_uupdump*/
+aria2c.log
+aria2c.session
+*.aria2
+
+
+# ───────────────────────────────────────────────────────────────────────────
+# 4. DISM AND SERVICING ARTIFACTS
+# ───────────────────────────────────────────────────────────────────────────
+# Staging directories, mount points, and logs created while servicing or
+# capturing images.
+
+# Mount points
+Mount/
+Mounts/
+Scratch/
+ScratchDir/
+DismMount/
+DismMounts/
+/mnt/
+/media/
+
+# Extracted component staging
+Extracted/
+ExtractedISO/
+ISOContent/
+ISO-Content/
+WinPE/
+BootFiles/
+
+# Captured and exported images
+Capture/
+Captured/
+Exported/
+Output/
+out/
+dist/
+release/
+
+
+# ───────────────────────────────────────────────────────────────────────────
+# 5. LOGS
+# ───────────────────────────────────────────────────────────────────────────
+# Sysprep logs, DISM logs, and script logs. These are useful for debugging
+# a specific build but should never be committed.
+
+*.log
+*.etl
+*.evtx
+
+# Sysprep and setup logs
+setupact.log
+setuperr.log
+setupapi.dev.log
+setupapi.app.log
+sysprep.log
+Panther/
+Windows/Logs/
+DISM/
+
+
+# ───────────────────────────────────────────────────────────────────────────
+# 6. SCRIPTS OUTPUT AND STATE
+# ───────────────────────────────────────────────────────────────────────────
+# State files, caches, and temporary output written by the repository's
+# PowerShell scripts.
+
+# Script state and caches
+*.state
+*.cache
+*.bak
+*.tmp
+*.temp
+*.partial
+*.part
+*.crdownload
+
+# Script output directories
+Temp/
+tmp/
+cache/
+.cache/
+LocalState/
+
+
+# ───────────────────────────────────────────────────────────────────────────
+# 7. WINDOWS OPERATING SYSTEM JUNK
+# ───────────────────────────────────────────────────────────────────────────
+# Files Windows creates automatically when browsing a folder.
+
+Thumbs.db
+Thumbs.db:encryptable
+ehthumbs.db
+ehthumbs_vista.db
+Desktop.ini
+$RECYCLE.BIN/
+*.lnk
+*.url
+*.stackdump
+[Dd]esktop.ini
+
+
+# ───────────────────────────────────────────────────────────────────────────
+# 8. macOS AND LINUX JUNK
+# ───────────────────────────────────────────────────────────────────────────
+# Contributors using non-Windows editors or running the repo through a
+# cross-platform toolchain.
+
+.DS_Store
+.AppleDouble
+.LSOverride
+._*
+.Spotlight-V100
+.Trashes
+.fseventsd
+*.swp
+*.swo
+*~
+
+
+# ───────────────────────────────────────────────────────────────────────────
+# 9. EDITOR AND IDE FILES
+# ───────────────────────────────────────────────────────────────────────────
+
+.vscode/
+!.vscode/settings.json.example
+!.vscode/extensions.json
+!.vscode/launch.json.example
+
+.idea/
+*.iml
+*.ipr
+*.iws
+
+*.sublime-project
+*.sublime-workspace
+
+.vs/
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+
+*.code-workspace
+
+
+# ───────────────────────────────────────────────────────────────────────────
+# 10. POWERSHELL AND SCRIPT ARTIFACTS
+# ───────────────────────────────────────────────────────────────────────────
+
+*.ps1xml
+PSScriptAnalyzerSettings.psd1.local
+TestResults.xml
+CodeCoverage.xml
+*.Tests.ps1.bak
+
+
+# ───────────────────────────────────────────────────────────────────────────
+# 11. SECRETS AND LOCAL CONFIGURATION
+# ───────────────────────────────────────────────────────────────────────────
+# Any file that might contain product keys, credentials, or machine-specific
+# paths. The repository ships no secrets, and contributors must not
+# accidentally commit theirs.
+
+*.personal.*
+*.private.*
+*.draft.*
+
+# Local overrides of any tracked configuration
+*.local.*
+!*.local.example
+!*.local.template
+
+# Product keys, credentials, and license files
+*productkey*
+*ProductKey*
+*serial*
+*license.key
+*.pfx
+*.p12
+*.key
+*.pem
+secrets.json
+credentials.json
+
+
+# ───────────────────────────────────────────────────────────────────────────
+# 12. GIT INTERNAL BACKUPS
+# ───────────────────────────────────────────────────────────────────────────
+
+.gitattributes.bak
+.gitmodules.bak
+*.orig.git
+*.orig.gitignore
+
+
+# ───────────────────────────────────────────────────────────────────────────
+# 13. FINAL OVERRIDES — FILES THAT MUST ALWAYS BE TRACKED
+# ───────────────────────────────────────────────────────────────────────────
+# Re-include files that would otherwise be caught by the broad rules above.
+
+# Keep .gitkeep placeholders so empty directory structures are tracked.
+!.gitkeep
+!**/.gitkeep
+
+# Documentation assets — screenshots, diagrams, sample output.
+!docs/images/**
+!docs/examples/**
+
+# Sample configuration and template files that ship with the repository.
+!*.example
+!*.template
+!*.sample
+
+# autounattend XML files — the repository's core artifacts.
+!autounattend/**
+!autounattend/*.xml
+
+# PowerShell scripts — the repository's automation layer.
+!scripts/**
+!scripts/*.ps1
+!scripts/*.psm1
+
+# Small XML and JSON files used as workflow templates.
+!templates/**
+!templates/*.xml
+!templates/*.json
+
+
+# ═══════════════════════════════════════════════════════════════════════════
+# END OF .gitignore
+# ═══════════════════════════════════════════════════════════════════════════
+# If you need to force-add a file that this file ignores, use:
+#
+#     git add -f <file>
+#
+# and explain WHY in your commit message and pull request description.
+# The reviewer will decide whether the file belongs in the tracked set or
+# should be relocated to a regenerable location.
+#
+# Large binaries (ISOs, WIMs, VM disks) are almost never appropriate for
+# this repository. Store them locally or on a share.
+# ═══════════════════════════════════════════════════════════════════════════
